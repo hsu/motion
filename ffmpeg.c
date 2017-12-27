@@ -632,10 +632,10 @@ struct ffmpeg *ffmpeg_open(char *ffmpeg_video_codec, char *filename,
     }
 
     /* Allocate the encoded raw picture. */
-    ffmpeg->picture = avcodec_alloc_frame();
+    ffmpeg->picture = av_frame_alloc();
 
     if (!ffmpeg->picture) {
-        MOTION_LOG(ERR, TYPE_ENCODER, NO_ERRNO, "%s: avcodec_alloc_frame -"
+        MOTION_LOG(ERR, TYPE_ENCODER, NO_ERRNO, "%s: av_frame_alloc -"
                    " could not alloc frame");
         ffmpeg_cleanups(ffmpeg);
         return NULL;
@@ -949,7 +949,7 @@ AVFrame *ffmpeg_prepare_frame(struct ffmpeg *ffmpeg, unsigned char *y,
 {
     AVFrame *picture;
 
-    picture = avcodec_alloc_frame();
+    picture = av_frame_alloc();
 
     if (!picture) {
         MOTION_LOG(ERR, TYPE_ENCODER, SHOW_ERRNO, "%s: Could not alloc frame");
@@ -998,7 +998,8 @@ void ffmpeg_deinterlace(unsigned char *img, int width, int height)
     picture.linesize[2] = width2;
 
     /* We assume using 'PIX_FMT_YUV420P' always */
-    avpicture_deinterlace(&picture, &picture, AV_PIX_FMT_YUV420P, width, height);
+    MOTION_LOG(ERR, TYPE_ENCODER, SHOW_ERRNO, "%s: Could not deinterlace frame");
+    // avpicture_deinterlace(&picture, &picture, AV_PIX_FMT_YUV420P, width, height);
 
 #if !defined(__SSE_MATH__) && (defined(__i386__) || defined(__x86_64__))
     __asm__ __volatile__ ( "emms");

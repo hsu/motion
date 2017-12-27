@@ -41,6 +41,7 @@ if(NOT MACHINE MATCHES "arm*")
 						${ROOTFSPATH}/usr/include/arm-linux-gnueabihf
 						${ROOTFSPATH}/usr/include
 						${ROOTFSPATH}/usr/local/include
+						/opt/vc/include
 						)
 
 	add_definitions(
@@ -67,14 +68,15 @@ enable_language(ASM)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 include_directories(
-					${ROOTFSPATH}/usr/include/mysql
-					${ROOTFSPATH}/usr/include/postgresql
+					# ${ROOTFSPATH}/usr/include/mysql
+					# ${ROOTFSPATH}/usr/include/postgresql
 					${USERLANDPATH}
 					${USERLANDPATH}/interface/vcos
 					${USERLANDPATH}/interface/vcos/pthreads
 					${USERLANDPATH}/interface/vmcs_host/linux
 					${USERLANDPATH}/interface/vmcs_host
 					${USERLANDPATH}/host_applications/linux/libs/bcm_host/include
+				  /opt/vc/include
 					)
 					
 add_definitions(	-DVERSION="mmaltest"
@@ -140,12 +142,18 @@ target_link_libraries(motion
 						pthread
 						m
 						jpeg
+
 						avformat
 						avcodec
 						avutil
+            avdevice
+            avfilter
+            swresample
+            swscale
+
 						z
-						mysqlclient
-						pq
+						# mysqlclient
+						# pq
 						rt
 						bcm_host
 						vcos
